@@ -9,26 +9,26 @@ module TVdb
       :serie_zip => "%s/api/%s/series/{{serie_id}}/all/{{language}}.zip",
       :episode_xml => "%s/api/%s/episodes/{{episode_id}}/{{language}}.xml"
     }
-    
+
     attr_reader :api_key, :templates
-    
+
     def initialize(api_key, base_url=BASE_URL)
       @api_key = api_key
       @templates = URLS.inject({}){|object, (k,v)| object[k] = Template.new(v % [base_url, @api_key]); object}
     end
-    
+
     def [](key)
       @templates[key]
     end
   end
-  
+
   class Template
     attr_reader :template
-    
+
     def initialize(template)
       @template = template
     end
-    
+
     def %(values)
       @template.gsub(/\{\{(.*?)\}\}/ ){
         value = values[$1] || values[$1.to_sym]
